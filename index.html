@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yazied Mohammed · n8n Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* Layout idea: one narrow reading column; each project is a case file with a node-chain diagram drawn like an n8n canvas. */
+:root{
+  --bg:#f6f7f9;
+  --surface:#ffffff;
+  --ink:#16202c;
+  --muted:#5a6675;
+  --line:#dde2e8;
+  --accent:#e2445f;
+  --accent-soft:#fde8ec;
+  --ok:#1f8a5b;
+  --ok-soft:#e3f4ec;
+  --warn:#9a6a00;
+  --warn-soft:#fbf1d6;
+  --font-display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono:"IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f141b; --surface:#161d26; --ink:#e8edf3; --muted:#9aa7b6; --line:#273241;
+    --accent:#ff6b85; --accent-soft:#3a1d26; --ok:#4cc58f; --ok-soft:#13302a; --warn:#e5b54a; --warn-soft:#3a2f14;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f141b; --surface:#161d26; --ink:#e8edf3; --muted:#9aa7b6; --line:#273241;
+  --accent:#ff6b85; --accent-soft:#3a1d26; --ok:#4cc58f; --ok-soft:#13302a; --warn:#e5b54a; --warn-soft:#3a2f14;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:16px;line-height:1.6}
+a{color:var(--accent)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+.wrap{max-width:860px;margin:0 auto;padding:48px 20px 64px;display:flex;flex-direction:column;gap:40px}
+h1,h2,h3{font-family:var(--font-display);text-wrap:balance;margin:0;line-height:1.15}
+h1{font-size:clamp(2rem,5vw,2.9rem);font-weight:700;letter-spacing:-0.02em}
+h2{font-size:1.6rem;font-weight:700;letter-spacing:-0.01em}
+h3{font-size:1.05rem;font-weight:700}
+p{margin:0;max-width:65ch}
+.muted{color:var(--muted)}
+
+/* header */
+header{display:flex;flex-direction:column;gap:14px}
+.role{font-family:var(--font-mono);font-size:.85rem;color:var(--accent);letter-spacing:.02em}
+.lead{font-size:1.1rem;color:var(--muted)}
+.contacts{display:flex;flex-wrap:wrap;gap:10px;margin-top:6px}
+.chip-link{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);text-decoration:none;font-size:.9rem}
+.chip-link:hover{border-color:var(--accent)}
+.todo{border-style:dashed;color:var(--muted)}
+
+/* project */
+.project{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:18px}
+.project.featured{border-top:4px solid var(--accent)}
+.meta{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pill{font-family:var(--font-mono);font-size:.75rem;padding:3px 9px;border-radius:999px;font-weight:500}
+.pill.live{background:var(--ok-soft);color:var(--ok)}
+.pill.demo{background:var(--accent-soft);color:var(--accent)}
+.pill.wip{background:var(--warn-soft);color:var(--warn)}
+.pill.plain{border:1px solid var(--line);color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.two > div{display:flex;flex-direction:column;gap:6px}
+.label{font-family:var(--font-mono);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+
+/* workflow diagram */
+.flow{display:flex;flex-direction:column;gap:8px}
+.flow-name{font-family:var(--font-mono);font-size:.8rem;color:var(--muted)}
+.chain{display:flex;flex-wrap:wrap;align-items:center;row-gap:12px;column-gap:0;padding:14px;border:1px solid var(--line);border-radius:10px;
+  background-color:var(--bg);background-image:radial-gradient(var(--line) 1px,transparent 1px);background-size:14px 14px}
+.node{flex:0 0 auto;display:flex;flex-direction:column;gap:2px;padding:8px 12px;border:1.5px solid var(--line);border-radius:9px;background:var(--surface);font-size:.82rem;line-height:1.3;max-width:170px}
+.node b{font-weight:600}
+.node span{font-family:var(--font-mono);font-size:.7rem;color:var(--muted)}
+.node.trigger{border-color:var(--accent)}
+.arrow{flex:0 0 26px;height:2px;background:var(--muted);position:relative;opacity:.6}
+.arrow::after{content:"";position:absolute;right:-1px;top:-4px;border-left:7px solid var(--muted);border-top:5px solid transparent;border-bottom:5px solid transparent}
+
+ul.points{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;max-width:68ch}
+.media{display:flex;flex-wrap:wrap;gap:10px}
+
+/* toolbox */
+.tools{display:flex;flex-wrap:wrap;gap:8px}
+.tool{font-family:var(--font-mono);font-size:.8rem;padding:6px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
+.shot{margin:0;display:flex;flex-direction:column;gap:8px}
+.shot img{width:100%;height:auto;border:1px solid var(--line);border-radius:10px;display:block}
+.shot figcaption{font-size:.85rem;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direction:column;gap:10px}
+
+@media (max-width:640px){
+  .wrap{padding:32px 16px 48px}
+  .project{padding:20px}
+  .two{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="wrap">
+
+<header>
+  <div class="role">n8n Automation Developer · Giza, Egypt</div>
+  <h1>Yazied Mohammed</h1>
+  <p class="lead">I build n8n automations that real people use every day: webhooks, data tables, Telegram bots, document generation and API integrations, designed around how the client already works.</p>
+  <div class="contacts">
+    <a class="chip-link" href="mailto:yazied48@gmail.com">yazied48@gmail.com</a>
+  </div>
+</header>
+
+<!-- PROJECT 1 -->
+<section class="project featured" aria-labelledby="p1">
+  <div class="meta">
+    <span class="pill live">In daily use</span>
+    <span class="pill plain">Real client</span>
+    <span class="pill plain">Healthcare</span>
+  </div>
+  <h2 id="p1">Echo reports and case search for a pediatric cardiology practice</h2>
+
+  <div class="two">
+    <div>
+      <div class="label">The problem</div>
+      <p>A pediatric cardiologist in Upper Egypt works alone between his clinic and nursery visits. Every case meant a Word file typed by hand, then a second formal report edited from a template, then digging through monthly folders to find an old case.</p>
+    </div>
+    <div>
+      <div class="label">What I built</div>
+      <p>A phone form that works offline, an n8n backend that stores every case, and a Telegram bot that finds any case in plain Arabic and sends back both Word documents, written in the doctor's own clinical wording.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 1 · Case sync</div>
+    <div class="chain" role="img" aria-label="Offline form posts to a webhook, token is checked, case is upserted into a data table, response returned">
+      <div class="node trigger"><b>Offline phone form</b><span>PWA, queues cases</span></div><div class="arrow"></div>
+      <div class="node"><b>Webhook</b><span>POST /echo-sync</span></div><div class="arrow"></div>
+      <div class="node"><b>Token check</b><span>IF · 401 on fail</span></div><div class="arrow"></div>
+      <div class="node"><b>Save case</b><span>Data Table upsert</span></div><div class="arrow"></div>
+      <div class="node"><b>Respond</b><span>{ ok, case_id }</span></div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 2 · Search bot and report builder</div>
+    <div class="chain" role="img" aria-label="Telegram message, read all cases, parse the Arabic request, then either reply with a list or build two Word files, zip them into docx and send">
+      <div class="node trigger"><b>Telegram</b><span>doctor's message</span></div><div class="arrow"></div>
+      <div class="node"><b>Get cases</b><span>Data Table</span></div><div class="arrow"></div>
+      <div class="node"><b>Understand request</b><span>Code · Arabic rules</span></div><div class="arrow"></div>
+      <div class="node"><b>Build Word XML</b><span>Code · OOXML</span></div><div class="arrow"></div>
+      <div class="node"><b>Zip to .docx</b><span>Compression</span></div><div class="arrow"></div>
+      <div class="node"><b>Send files</b><span>Telegram</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="label" style="margin-bottom:8px">Details I'm proud of</div>
+    <ul class="points">
+      <li>The doctor types requests the way he talks: "latest 5 cases", "cases from Al-Nour nursery", "last month", or part of a name. The bot normalizes Arabic spelling and parses dates and nursery names without any paid AI.</li>
+      <li>One smart form by heart structure (normal by default, pick only the abnormal findings with mm and mmHg values) replaces a separate template per diagnosis.</li>
+      <li>Both documents, the short case note and the formal report with its table, are generated as real .docx files inside n8n with no external library.</li>
+      <li>The form saves cases on the phone when there is no signal at a nursery and syncs later. The sync webhook is token protected and the bot only answers approved Telegram accounts.</li>
+      <li>Handed over to the doctor and running in production.</li>
+    </ul>
+  </div>
+
+  <div class="media">
+    <a class="chip-link" href="https://vt.tiktok.com/ZSpkCbtE9/" target="_blank" rel="noopener">&#9654; Watch the build on TikTok</a>
+  </div>
+</section>
+
+<!-- PROJECT 2 -->
+<section class="project" aria-labelledby="p2">
+  <div class="meta">
+    <span class="pill demo">Demo built for a pitch</span>
+    <span class="pill plain">Fitness</span>
+  </div>
+  <h2 id="p2">Gym operations on Telegram</h2>
+  <p class="muted">A new gym ran on paper: trainers walked around with a pen and notebook and the owner had no daily picture. I built a Telegram system the staff can use from their phones.</p>
+  <div class="flow">
+    <div class="flow-name">Owner morning report</div>
+    <div class="chain" role="img" aria-label="Schedule trigger reads members from Google Sheets, builds a summary and sends it to the owner on Telegram">
+      <div class="node trigger"><b>Every morning</b><span>Schedule</span></div><div class="arrow"></div>
+      <div class="node"><b>Members</b><span>Google Sheets</span></div><div class="arrow"></div>
+      <div class="node"><b>Summary</b><span>expiring soon, today</span></div><div class="arrow"></div>
+      <div class="node"><b>Owner</b><span>Telegram message</span></div>
+    </div>
+  </div>
+  <div class="flow">
+    <div class="flow-name">Trainer session log</div>
+    <div class="chain" role="img" aria-label="Trainer messages the bot, message is parsed, saved to the Sessions sheet and the bot confirms">
+      <div class="node trigger"><b>Trainer message</b><span>"trainee - note"</span></div><div class="arrow"></div>
+      <div class="node"><b>Parse</b><span>Code</span></div><div class="arrow"></div>
+      <div class="node"><b>Sessions tab</b><span>Google Sheets</span></div><div class="arrow"></div>
+      <div class="node"><b>Confirm</b><span>reply to sender</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT 3 -->
+<section class="project" aria-labelledby="p3">
+  <div class="meta">
+    <span class="pill wip">Built · going live next</span>
+    <span class="pill plain">Official Meta API</span>
+    <span class="pill plain">Healthcare</span>
+  </div>
+  <h2 id="p3">WhatsApp patient intake bot and doctor inbox</h2>
+  <p class="muted">A second doctor wants every patient conversation saved and searchable per patient, an automatic first reply that collects the child's details, and a simple place to answer patients himself. I built the full system on the official WhatsApp Cloud API, n8n and Supabase (Postgres + Storage): two workflows and one database.</p>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 1 · Receive, store, auto-reply (23 nodes)</div>
+    <div class="chain" role="img" aria-label="Meta webhook, log message in Postgres, skip duplicates, mark as read, save media to storage, intake step in SQL, send reply, log reply and delivery status">
+      <div class="node trigger"><b>Meta webhook</b><span>verify + receive</span></div><div class="arrow"></div>
+      <div class="node"><b>Log message</b><span>Postgres · dedupe</span></div><div class="arrow"></div>
+      <div class="node"><b>Mark read</b><span>blue ticks + typing</span></div><div class="arrow"></div>
+      <div class="node"><b>Media</b><span>Supabase Storage</span></div><div class="arrow"></div>
+      <div class="node"><b>Intake step</b><span>SQL function</span></div><div class="arrow"></div>
+      <div class="node"><b>Send + log</b><span>Graph API · status</span></div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 2 · Doctor inbox, served by n8n itself (17 nodes)</div>
+    <div class="chain" role="img" aria-label="n8n serves the inbox page, page calls an API webhook, password checked in the database, then list chats, load messages or send the doctor's reply">
+      <div class="node trigger"><b>GET /wa-inbox</b><span>serves the page</span></div><div class="arrow"></div>
+      <div class="node"><b>POST /api</b><span>chats · messages · reply</span></div><div class="arrow"></div>
+      <div class="node"><b>Password check</b><span>Postgres</span></div><div class="arrow"></div>
+      <div class="node"><b>24h window check</b><span>WhatsApp rule</span></div><div class="arrow"></div>
+      <div class="node"><b>Send + log</b><span>sent_by: doctor</span></div>
+    </div>
+  </div>
+
+  <figure class="shot">
+    <img src="inbox.png" alt="The doctor's inbox: chat list with unread counts on the right, the conversation with the bot's intake questions and the doctor's reply in the middle, and the reply box at the bottom" width="1200" height="720">
+    <figcaption>The doctor's inbox (demo data). Arabic, right to left, works on a phone.</figcaption>
+  </figure>
+
+  <div class="two">
+    <div>
+      <div class="label">The bot</div>
+      <ul class="points">
+        <li>Rule-based intake with no AI cost: asks for the child's name, age and complaint, validates answers, and keeps files sent mid-conversation.</li>
+        <li>The parent can start a new case at any time by typing "new".</li>
+        <li>All conversation state lives in one Postgres function, so it is atomic and tested on its own: welcome, short name, media instead of text, completion and restart.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="label">The inbox</div>
+      <ul class="points">
+        <li>Chat list with unread counts and last message, search by child's name or phone.</li>
+        <li>Each chat shows the intake answers at the top, who replied (bot or doctor) and delivery ticks.</li>
+        <li>Respects WhatsApp's 24-hour rule: the reply box locks when free replies are no longer allowed.</li>
+        <li>No extra hosting: n8n serves the page and its API.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div>
+    <div class="label" style="margin-bottom:8px">Reliability and privacy</div>
+    <ul class="points">
+      <li>Meta sometimes sends the same webhook twice; duplicates are stored once and never answered twice.</li>
+      <li>Delivery statuses only move forward (sent, delivered, read), even when Meta sends them out of order.</li>
+      <li>Images and voice notes are downloaded within Meta's 5-minute link window into a private bucket.</li>
+      <li>Row Level Security keeps patient data closed to public API keys; tokens live only in n8n credentials.</li>
+    </ul>
+  </div>
+
+  <p class="muted">Status: database, bot and inbox built and tested with demo data; connecting the clinic's own WhatsApp number is the next step.</p>
+</section>
+
+<section aria-labelledby="tb" style="display:flex;flex-direction:column;gap:12px">
+  <h2 id="tb">Toolbox</h2>
+  <div class="tools">
+    <span class="tool">n8n (self-hosted)</span>
+    <span class="tool">Webhooks &amp; Respond to Webhook</span>
+    <span class="tool">Data Tables</span>
+    <span class="tool">Code node · JavaScript</span>
+    <span class="tool">Telegram Bot API</span>
+    <span class="tool">WhatsApp Cloud API · Graph API</span>
+    <span class="tool">Supabase · Postgres · Storage</span>
+    <span class="tool">SQL · PL/pgSQL</span>
+    <span class="tool">Google Sheets</span>
+    <span class="tool">PWA / offline forms</span>
+    <span class="tool">Word .docx generation</span>
+    <span class="tool">Hostinger</span>
+  </div>
+</section>
+
+</main>
+</body>
+</html>
