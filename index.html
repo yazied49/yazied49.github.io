@@ -206,12 +206,12 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
 <!-- PROJECT 3 -->
 <section class="project" aria-labelledby="p3">
   <div class="meta">
-    <span class="pill wip">Built · going live next</span>
+    <span class="pill demo">Working demo</span>
     <span class="pill plain">Official Meta API</span>
     <span class="pill plain">Healthcare</span>
   </div>
   <h2 id="p3">WhatsApp patient intake bot and doctor inbox</h2>
-  <p class="muted">A second doctor wants every patient conversation saved and searchable per patient, an automatic first reply that collects the child's details, and a simple place to answer patients himself. I built the full system on the official WhatsApp Cloud API, n8n and Supabase (Postgres + Storage): two workflows and one database.</p>
+  <p class="muted">A clinic that takes bookings on WhatsApp needs every patient conversation saved per patient, an automatic first reply that collects the child's details and books the visit, and a simple place for staff to answer patients themselves. I built the full system on the official WhatsApp Cloud API, n8n and Supabase (Postgres + Storage): two workflows and one database. The demo runs on a generic clinic ("Happy Clinic") with test data.</p>
 
   <div class="flow">
     <div class="flow-name">Workflow 1 · Receive, store, auto-reply (23 nodes)</div>
@@ -245,7 +245,9 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
     <div>
       <div class="label">The bot</div>
       <ul class="points">
-        <li>Rule-based intake with no AI cost: asks for the child's name, age and complaint, validates answers, and keeps files sent mid-conversation.</li>
+        <li>Rule-based intake with no AI cost. The welcome message has two buttons: "Book a visit" and "New patient". New patients are asked for the child's name and age, then the complaint, and any lab results or scans they send are kept.</li>
+        <li>Booking takes two taps (morning or evening), then the bot confirms the saved name and age before it books and replies with a booking number and date. If the chosen period is full, it offers the nearest available slots.</li>
+        <li>Text typed before pressing a button is never mistaken for a name: the bot answers with the two buttons instead.</li>
         <li>The parent can start a new case at any time by typing "new".</li>
         <li>All conversation state lives in one Postgres function, so it is atomic and tested on its own: welcome, short name, media instead of text, completion and restart.</li>
       </ul>
@@ -254,7 +256,8 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
       <div class="label">The inbox</div>
       <ul class="points">
         <li>Chat list with unread counts and last message, search by child's name or phone.</li>
-        <li>Each chat shows the intake answers at the top, who replied (bot or doctor) and delivery ticks.</li>
+        <li>Each chat has a patient file: name, age, complaint, next booking and the files sent, plus who replied (bot or staff) and delivery ticks.</li>
+        <li>A switch turns the automatic replies on or off at any time.</li>
         <li>Respects WhatsApp's 24-hour rule: the reply box locks when free replies are no longer allowed.</li>
         <li>No extra hosting: n8n serves the page and its API.</li>
       </ul>
@@ -271,7 +274,7 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
     </ul>
   </div>
 
-  <p class="muted">Status: database, bot and inbox built and tested with demo data; connecting the clinic's own WhatsApp number is the next step.</p>
+  <p class="muted">Status: working demo, tested end to end with test data on a self-hosted n8n and Supabase server. It can be adapted to any clinic or business that takes bookings on WhatsApp.</p>
 </section>
 
 <section aria-labelledby="tb" style="display:flex;flex-direction:column;gap:12px">
