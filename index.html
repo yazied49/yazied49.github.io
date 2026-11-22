@@ -175,6 +175,76 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
   </div>
 </section>
 
+<!-- PROJECT: Lead capture -->
+<section class="project" aria-labelledby="p4">
+  <div class="meta">
+    <span class="pill demo">Portfolio project · sample data</span>
+    <span class="pill plain">Marketing agencies</span>
+    <span class="pill plain">Slack + Email</span>
+  </div>
+  <h2 id="p4">Lead capture and follow-up system for marketing agencies</h2>
+
+  <div class="two">
+    <div>
+      <div class="label">The problem</div>
+      <p>Agencies lose leads between the form and the first reply. The answer comes hours late, the sales team is not told, and nobody can say which ad source actually pays.</p>
+    </div>
+    <div>
+      <div class="label">What I built</div>
+      <p>An n8n system that answers every lead by email within seconds, scores it Hot, Warm or Cold with readable rules, alerts the sales team in Slack, follows up after 24 hours, and shows everything in a CRM dashboard with ROI per ad source.</p>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 1 · Intake and instant reply (13 nodes)</div>
+    <div class="chain" role="img" aria-label="Form posts to a webhook, lead is validated and scored, saved to Postgres, then an instant email is sent and the sales team is alerted on Slack">
+      <div class="node trigger"><b>Lead form</b><span>any form or ad</span></div><div class="arrow"></div>
+      <div class="node"><b>Webhook</b><span>POST /intake</span></div><div class="arrow"></div>
+      <div class="node"><b>Validate + score</b><span>Code · fixed rules</span></div><div class="arrow"></div>
+      <div class="node"><b>Save lead</b><span>Supabase · Postgres</span></div><div class="arrow"></div>
+      <div class="node"><b>Instant reply</b><span>Email · SMTP</span></div><div class="arrow"></div>
+      <div class="node"><b>Alert sales</b><span>Slack channel</span></div>
+    </div>
+  </div>
+
+  <div class="flow">
+    <div class="flow-name">Workflow 2 · Follow-up and SLA alerts (10 nodes)</div>
+    <div class="chain" role="img" aria-label="Every 15 minutes the workflow claims overdue leads once, sends a follow-up email and a Slack reminder, and alerts the team when an interested lead has not been contacted">
+      <div class="node trigger"><b>Every 15 minutes</b><span>Schedule</span></div><div class="arrow"></div>
+      <div class="node"><b>Claim overdue</b><span>Postgres · once only</span></div><div class="arrow"></div>
+      <div class="node"><b>Follow-up email</b><span>after 24 hours</span></div><div class="arrow"></div>
+      <div class="node"><b>Slack reminder</b><span>+ 15 min SLA alert</span></div>
+    </div>
+  </div>
+
+  <div class="media">
+    <a class="chip-link" href="https://vt.tiktok.com/ZSsdwvg6E/" target="_blank" rel="noopener">&#9654; Watch it run on TikTok</a>
+  </div>
+
+  <div class="two">
+    <div>
+      <div class="label">What it does</div>
+      <ul class="points">
+        <li>Rule-based scoring with no AI cost. Every score comes with its reasons (buying keywords, phone number, source, email domain), so a team can read the rules and change them.</li>
+        <li>The Slack alert shows the lead's name, tier, score, contact details and why it scored that way.</li>
+        <li>A safety net: a follow-up email after 24 hours, and an alert after 15 minutes when an interested lead has had no contact. Each alert is sent once per lead.</li>
+        <li>A CRM dashboard served by n8n itself: KPIs, pipeline value, ROI per ad source, a timeline per lead and one-click status updates.</li>
+      </ul>
+    </div>
+    <div>
+      <div class="label">Built to adapt</div>
+      <ul class="points">
+        <li>Storage and notification sit in swappable groups, so the same flow can write to HubSpot, Zoho or Google Sheets and alert on WhatsApp, Teams or Telegram.</li>
+        <li>Invalid input is rejected, a hidden spam field catches bots, and user text is escaped before it reaches an email or a Slack message.</li>
+        <li>A failed email or alert is logged on the lead instead of stopping the flow.</li>
+        <li>The CRM API is key protected.</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="muted">A portfolio project with sample data. It is not running for a client. Four n8n workflows and one Supabase database, on a self-hosted server.</p>
+</section>
+
 <!-- PROJECT 2 -->
 <section class="project" aria-labelledby="p2">
   <div class="meta">
@@ -285,6 +355,9 @@ footer{border-top:1px solid var(--line);padding-top:24px;display:flex;flex-direc
     <span class="tool">Data Tables</span>
     <span class="tool">Code node · JavaScript</span>
     <span class="tool">Telegram Bot API</span>
+    <span class="tool">Slack API</span>
+    <span class="tool">Email · SMTP</span>
+    <span class="tool">Schedule triggers</span>
     <span class="tool">WhatsApp Cloud API · Graph API</span>
     <span class="tool">Supabase · Postgres · Storage</span>
     <span class="tool">SQL · PL/pgSQL</span>
